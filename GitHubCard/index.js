@@ -50,6 +50,8 @@ const followersArray = [];
 
 function createCard (response) {
 
+//define new elements
+
 const card = document.createElement('div');
 const image = document.createElement('img');
 const cardInfo = document.createElement('div');
@@ -62,21 +64,52 @@ const followers = document.createElement('p');
 const following = document.createElement('p');
 const bio = document.createElement('p');
 
+image.setAttribute('src', response.avatar_url);
 
 
 
+// set up structure
+
+card.append(image);
+card.append(cardInfo);
+cardInfo.append(name);
+cardInfo.append(userName);
+cardInfo.append(userLocation);
+cardInfo.append(userProfile);
+userProfile.append(profileAddress);
+cardInfo.append(followers);
+cardInfo.append(following);
+cardInfo.append(bio);
+
+// add classes to elements
+
+card.classList.add('card');
+cardInfo.classList.add('card-info');
+name.classList.add('name');
+userName.classList.add('username');
+
+return card;
 
 }
 
-
-
-
+const entryPoint = document.querySelector('.cards');
+console.log(entryPoint);
 
 
 axios.get('https://api.github.com/users/dfieker')
 .then(response => {
-  console.log(response.data);
-});
+  console.log(response);
+  const newCard = createCard(response.data);
+  entryPoint.append(newCard);
+  // response.data.forEach(item => {
+  //   const newCard = createCard(item);
+  //   entryPoint.append(newCard);
+  // })
+})
+.catch( error => {
+  console.log('Error', error);
+})
+
 /* List of LS Instructors Github username's: 
   tetondan
   dustinmyers
