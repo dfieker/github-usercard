@@ -3,6 +3,8 @@
            https://api.github.com/users/<your name>
 */
 
+
+
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -24,7 +26,13 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = [
+  "Nobro777",
+  "Keyeric",
+  "johnkirtley",
+  "hlee2542",
+  "Reikiryo"
+];
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -45,6 +53,84 @@ const followersArray = [];
 </div>
 
 */
+
+function createCard (response) {
+
+//define new elements
+
+const card = document.createElement('div');
+const image = document.createElement('img');
+const cardInfo = document.createElement('div');
+const name = document.createElement('h3');
+const userName = document.createElement('p');
+const userLocation = document.createElement('p');
+const userProfile = document.createElement('p');
+const profileAddress = document.createElement('a');
+const followers = document.createElement('p');
+const following = document.createElement('p');
+const bio = document.createElement('p');
+
+image.setAttribute('src', response.avatar_url);
+name.textContent = response.name;
+userName.textContent = response.login;
+userLocation.textContent = response.location;
+profileAddress.textContent = response.html_url;
+followers.textContent = "Followers: " + response.followers;
+following.textContent = "Following: " + response.following;
+bio.textContent = "Bio: " + response.bio;
+
+
+// set up structure
+
+card.append(image);
+card.append(cardInfo);
+cardInfo.append(name);
+cardInfo.append(userName);
+cardInfo.append(userLocation);
+cardInfo.append(userProfile);
+userProfile.append(profileAddress);
+cardInfo.append(followers);
+cardInfo.append(following);
+cardInfo.append(bio);
+
+// add classes to elements
+
+card.classList.add('card');
+cardInfo.classList.add('card-info');
+name.classList.add('name');
+userName.classList.add('username');
+
+return card;
+
+}
+
+const entryPoint = document.querySelector('.cards');
+console.log(entryPoint);
+
+// My GET Request
+
+axios.get('https://api.github.com/users/dfieker')
+.then(response => {
+  console.log(response.data);
+  const newCard = createCard(response.data);
+  entryPoint.append(newCard);
+})
+.catch( error => {
+  console.log('Error', error);
+})
+
+// Followers GET Requests
+followersArray.forEach((element) => {
+  axios.get(`https://api.github.com/users/${element}`)
+  .then(response => {
+    console.log(response.data);
+    const followerCard = createCard(response.data);
+    entryPoint.append(followerCard);
+  })
+  .catch( error => {
+    console.log('Error', error);
+  })
+})
 
 /* List of LS Instructors Github username's: 
   tetondan
